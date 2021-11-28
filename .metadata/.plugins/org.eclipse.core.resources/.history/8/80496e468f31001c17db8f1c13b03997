@@ -1,0 +1,110 @@
+package es.uca.gii.csi21.turner.data;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class Barco 
+{
+	private String _sCodRegistro;
+	private String _sNombre;
+	private int _iTripulantes;
+	
+	public String get_sCodRegistro() 
+	{
+		return _sCodRegistro;
+	}
+
+	public String get_sNombre() 
+	{
+		return _sNombre;
+	}
+	
+	public int get_iTripulantes() 
+	{
+		return _iTripulantes;
+	}
+	
+	public void set_sCodRegistro(String sCodRegistro) 
+	{
+		_sCodRegistro = sCodRegistro;
+	}
+	
+	public void set_sNombre(String sNombre) 
+	{
+		_sNombre = sNombre;
+	}
+	
+	public void set_iTripulantes(int iTripulantes) 
+	{
+		_iTripulantes = iTripulantes;
+	}
+
+	/**
+	 * @param sCodRegistro
+	 * @throws Exception
+	 * Description 
+	 * TODO
+	 */
+	public Barco(String sCodRegistro) throws Exception 
+	{
+		_sCodRegistro = sCodRegistro;
+		
+		Connection connection = null;
+		ResultSet resultSet = null;
+		
+		try
+		{
+			connection = Data.Connection();
+			resultSet = connection.createStatement().executeQuery("SELECT codRegistro, nombre, tripulantes FROM barco"
+					+ " WHERE codRegistro = " + Data.String2Sql(sCodRegistro, true, false));
+			
+			if (resultSet.next())
+			{
+				_sNombre = resultSet.getString("nombre");
+				_iTripulantes = resultSet.getInt("tripulantes");
+			}
+			System.out.println(_sNombre);
+			
+		}
+		catch (SQLException e)	{ throw e; }
+		finally
+		{
+			if (resultSet != null) resultSet.close();
+			if (connection != null) connection.close();
+		}
+	}
+
+	/**
+	 * Description 
+	 * TODO
+	 */
+	@Override
+	public String toString() 
+	{
+		return super.toString() + ":" + _sCodRegistro + ":" + _sNombre + ":" + _iTripulantes;
+	}
+	
+	public static Barco Create(String sCodRegistro, String sNombre, int iTripulantes ) throws Exception
+	{
+		Connection con = null;
+		try 
+		{
+			con = Data.Connection();
+			con.createStatement()
+					.executeUpdate("INSERT INTO barco (codRegistro, nombre, tripulantes) " + " VALUES "
+							+ "(" + Data.String2Sql(sCodRegistro, true, false) + ", "
+							+ Data.String2Sql(sNombre, true, false) + ", "
+						    + Data.String2Sql(""+iTripulantes+"", true, false) + ");" );
+			return new Barco(sCodRegistro); 
+		} catch (SQLException e) 
+		{
+			throw e;
+		} finally 
+		{
+			if (con != null)
+				con.close();
+		}
+	}
+}
+
