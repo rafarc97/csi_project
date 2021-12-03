@@ -34,6 +34,5 @@ public class BarcosTableModel extends javax.swing.table.AbstractTableModel
 			default: return null;
 		}
 	}
-	
 	public Barco getData(int iRow) { return _aData.get(iRow); }
 }

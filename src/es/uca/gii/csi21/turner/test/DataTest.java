@@ -11,7 +11,6 @@ import es.uca.gii.csi21.turner.data.Data;
 
 class DataTest 
 {
-
 	/**
 	 * static void setUpBeforeClass()
 	 * @throws Exception
@@ -38,14 +37,12 @@ class DataTest
 		{
 			con = Data.Connection();
 			rs = con.createStatement().executeQuery("SELECT COUNT(nombre) num FROM barco;");
-			
 			rs.next();
-			int i = rs.getInt("num");
 			
+			int i = rs.getInt("num");
 			assertEquals(2, i);
 			
 			rs.close();
-			
 			rs = con.createStatement().executeQuery("SELECT * FROM barco;");
 			
 			i = 0;
@@ -56,11 +53,10 @@ class DataTest
 			}
 			
 			assertEquals(2, i);
-			
 			i = rs.getMetaData().getColumnCount();
 			assertEquals(2, i);
-		}
-		catch (SQLException e) { throw e; }
+			
+		}catch (SQLException e) { throw e; }
 		finally 
 		{
 			if (rs != null) rs.close();

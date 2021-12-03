@@ -21,15 +21,17 @@ public class IfrBarco extends JInternalFrame
 
 	/**
 	 * public IfrBarco() 
+	 * @param barco
 	 * Description: Create the frame.
 	 * @throws Exception 
 	 */
 	public IfrBarco(Barco barco) throws Exception 
 	{
+		_barco = barco;
 		setResizable(true);
 		setClosable(true);
 		setTitle("Barco");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 600, 450);
 		getContentPane().setLayout(null);
 		
 		JLabel lblRegistro = new JLabel("Registro");
@@ -61,13 +63,20 @@ public class IfrBarco extends JInternalFrame
 		
 		JComboBox<CategoriaBarco> cmbCategoriaBarco = new JComboBox<CategoriaBarco>();
 		cmbCategoriaBarco.setModel(new CategoriaBarcoListModel(CategoriaBarco.Select()));
-		System.out.println(CategoriaBarco.Select());
-		cmbCategoriaBarco.setBounds(200, 50, 300, 300);
+		cmbCategoriaBarco.setBounds(10, 104, 100, 20);
 		getContentPane().add(cmbCategoriaBarco);
 		
 		JLabel lblCategoriaBarco = new JLabel("Categoria Barco");
-		lblCategoriaBarco.setBounds(280, 112, 96, 17);
+		lblCategoriaBarco.setBounds(10, 77, 96, 17);
 		getContentPane().add(lblCategoriaBarco);
+		
+		if(_barco != null) 
+		{
+			txtRegistro.setText(_barco.getRegistro());
+			txtNombre.setText(_barco.getNombre());
+			txtTripulantes.setText("" + _barco.getTripulantes() + "");
+			cmbCategoriaBarco.getModel().setSelectedItem(_barco.getCategoriaBarco());
+		}
 		
 		JButton butSave = new JButton("Guardar");
 		butSave.addActionListener(new ActionListener() 
@@ -76,58 +85,55 @@ public class IfrBarco extends JInternalFrame
 			{
 				try 
 				{
-					if ((CategoriaBarco) cmbCategoriaBarco.getModel().getSelectedItem() == null) {
+					if ((CategoriaBarco) cmbCategoriaBarco.getModel().getSelectedItem() == null)
+					{
 						JOptionPane.showMessageDialog(null, "Campo Vacío", "Error en el campo CategoriaBarco",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					
 					if (txtRegistro.getText().isEmpty()) 
 					{
 						JOptionPane.showMessageDialog(null, "Campo Vacío", "Error en el campo Registro",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-
 					if (txtNombre.getText().isEmpty()) 
 					{
 						JOptionPane.showMessageDialog(null, "Campo Vacío", "Error en el campo Nombre",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					
 					if (txtTripulantes.getText().isEmpty()) 
 					{
 						JOptionPane.showMessageDialog(null, "Campo Vacío", "Error en el campo Tripulantes",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-
 					if (_barco == null)
 					{
 						_barco = Barco.Create(txtRegistro.getText(), (CategoriaBarco)cmbCategoriaBarco.getModel().getSelectedItem(), txtNombre.getText(), Integer.parseInt(txtTripulantes.getText()));
-					} else 
+					}
+					else 
 					{
 						_barco.setRegistro(txtRegistro.getText());
-						cmbCategoriaBarco.getModel().setSelectedItem(_barco.getCategoriaBarco());
 						_barco.setNombre(txtNombre.getText());
-						_barco.setTripulantes(Integer.parseInt(txtTripulantes.getText()));
+						_barco.setTripulantes(Integer.parseInt(txtTripulantes.getText()));						
 						_barco.Update();
 					}
-				} catch (NumberFormatException ee) 
+				}catch (NumberFormatException ee) 
 				{
 					JOptionPane.showMessageDialog(null,
 							"Error. Se ha encontrado alguna letra en el campo tripulantes",
 							"Error en el campo Tripulantes", JOptionPane.ERROR_MESSAGE);
 
-				} catch (Exception eee) 
+				}catch (Exception eee) 
 				{
 					JOptionPane.showMessageDialog(null, "Ha habido un error", "Error",
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}	
 		});
-		butSave.setBounds(10, 108, 85, 21);
+		butSave.setBounds(291, 104, 85, 21);
 		getContentPane().add(butSave);	
 	}
 }

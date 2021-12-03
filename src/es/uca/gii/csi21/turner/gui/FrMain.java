@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 
 public class FrMain 
 {
-
 	private JFrame frame;
 
 	/**
@@ -30,7 +29,7 @@ public class FrMain
 				{
 					FrMain window = new FrMain();
 					window.frame.setVisible(true);
-				} catch (Exception e) { e.printStackTrace(); }
+				}catch (Exception e) { e.printStackTrace(); }
 			}
 		});
 	}
@@ -72,13 +71,15 @@ public class FrMain
 			public void actionPerformed(ActionEvent e) 
 			{
 				IfrBarco ifrBarco = null;
-				try {
+				try 
+				{
 					ifrBarco = new IfrBarco(null);
-				} catch (Exception e1) {
+				}catch (Exception e1) 
+				{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				ifrBarco.setBounds(10, 27, 450, 350);
+				ifrBarco.setBounds(10, 27, 800, 650);
 				frame.getContentPane().add(ifrBarco);
 				ifrBarco.setVisible(true);
 			}
@@ -94,13 +95,15 @@ public class FrMain
 			public void actionPerformed(ActionEvent e) 
 			{
 				IfrBarcos ifrBarcos = null;
-				try {
-					ifrBarcos = new IfrBarcos(null);
-				} catch (Exception e1) {
+				try 
+				{
+					ifrBarcos = new IfrBarcos(frame);
+				}catch (Exception e1) 
+				{
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				ifrBarcos.setBounds(10, 27, 450, 350);
+				ifrBarcos.setBounds(10, 27, 800, 650);
 				// Second parameter makes always appear in the foreground appear in the foreground
 				frame.getContentPane().add(ifrBarcos, 0);
 				ifrBarcos.setVisible(true);

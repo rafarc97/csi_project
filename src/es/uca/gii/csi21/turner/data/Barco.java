@@ -20,9 +20,8 @@ public class Barco
 	public String getNombre() { return _sNombre; }
 	public int getTripulantes() { return _iTripulantes; }
 	public boolean getIsDeleted() { return _bIsDeleted; }
-	public CategoriaBarco getCategoriaBarco() { return _categoriaBarco;}
+	public CategoriaBarco getCategoriaBarco() { return _categoriaBarco; }
 	
-
 	// Setters
 	public void setIsDeleted(boolean bIsDeleted) { _bIsDeleted = bIsDeleted; }
 	public void setRegistro(String sRegistro) { _sRegistro = sRegistro; }
@@ -30,7 +29,6 @@ public class Barco
 	public void setTripulantes(int iTripulantes) { _iTripulantes = iTripulantes; }
 	public void setCategoriaBarco(CategoriaBarco categoriaBarco) { _categoriaBarco = categoriaBarco; }
 
-	// Constructor
 	/**
 	 * public Barco(String sRegistro)
 	 * @param sRegistro
@@ -79,8 +77,9 @@ public class Barco
 	}
 
 	/**
-	 * public static Barco Create(String sRegistro, String sNombre, int iTripulantes)
+	 * public static Barco Create(String sRegistro, CategoriaBarco categoriaBarco, String sNombre, int iTripulantes)
 	 * @param sRegistro
+	 * @param categoriaBarco
 	 * @param sNombre
 	 * @param iTripulantes
 	 * @return "Barco" Class instance
@@ -108,7 +107,7 @@ public class Barco
 	/**
 	 * public void Delete()
 	 * @throws Exception
-	 * Description: Delete a register of the "barco" database using data from the current instance
+	 * Description: Delete a register of the "barco" table using data from the current instance
 	 * TODO: Database is working correctly
 	 */
 	public void Delete() throws Exception 
@@ -131,7 +130,7 @@ public class Barco
 	/**
 	 * public void Update()
 	 * @throws Exception
-	 * Description: Update database using data from the current instance
+	 * Description: Update the "barco" table using data from the current instance
 	 * TODO: Database is working correctly
 	 */
 	public void Update() throws Exception 
@@ -152,14 +151,15 @@ public class Barco
 	}
 
 	/**
-	 * public static ArrayList<Barco> Select(String sRegistro, String nombre, int tripulantes)
-	 * @param _sRegistro
-	 * @param nombre
-	 * @param tripulantes
+	 * public static ArrayList<Barco> Select(String sRegistro, String sCategoriaBarco, String sNombre, int iTripulantes)
+	 * @param sRegistro
+	 * @param sCategoriaBarco
+	 * @param sNombre
+	 * @param iTripulantes
 	 * @return An ArrayList<Barco>
 	 * @throws Exception
 	 * Description: Get all registers from database, create and ArrayList<Barco> and return it
-	 * TODO: Database is working correctly; is received registro, nombre and tripulantes private attributes as parameters
+	 * TODO: Database is working correctly; is received "registro", "categoriabarco", "nombre" and "tripulantes" parameters
 	 */
 	public static ArrayList<Barco> Select(String sRegistro, String sCategoriaBarco, String sNombre, int iTripulantes) throws Exception 
 	{
@@ -169,13 +169,10 @@ public class Barco
 
 		try 
 		{
-			System.out.println("SELECT B.registro FROM barco B INNER JOIN categoriabarco C ON B.id_categoriabarco = C.id"
-					+ Barco.Where(sRegistro, sCategoriaBarco, sNombre, iTripulantes));
 			con = Data.Connection();
 			rs = con.createStatement().executeQuery("SELECT B.registro FROM barco B INNER JOIN categoriabarco C ON B.id_categoriabarco = C.id"
 					+ Barco.Where(sRegistro, sCategoriaBarco, sNombre, iTripulantes));
 					
-			
 			while (rs.next()) { aBarco.add(new Barco(rs.getString("registro"))); }
 				
 			return aBarco;
@@ -188,16 +185,17 @@ public class Barco
 	}
 
 	/**
-	 * private static String Where(String _sRegistro, String nombre, int tripulantes)
+	 * private static String Where(String _sRegistro, String sCategoriaBarco, String sNombre, int iTripulantes)
 	 * @param _sRegistro
+	 * @param sCategoriaBarco
 	 * @param nombre
 	 * @param tripulantes
 	 * @return A string which contains "Where" conditions
 	 * @throws Exception
-	 * Description: Static private method which return a string which contains "Where" conditions
-	 * TODO: Receive _sRegistro, nombre and tripulantes private attributes as parameters
+	 * Description: Static private method which return a string that contains "Where" conditions
+	 * TODO: Receive "_sRegistro", "sCategoriaBarco", "sNombre" and "iTripulantes" parameters
 	 */
-	private static String Where(String _sRegistro, String sCategoriaBarco, String nombre, int tripulantes) throws Exception 
+	private static String Where(String _sRegistro, String sCategoriaBarco, String sNombre, int iTripulantes) throws Exception 
 	{
 		String query = "";
 		
@@ -206,11 +204,11 @@ public class Barco
 			if (_sRegistro != null)
 				query += "B.registro LIKE " + Data.String2Sql(_sRegistro, true, true) + " AND ";
 			if (sCategoriaBarco != null)
-				query += "B.id_categoriabarco LIKE " + Data.String2Sql(sCategoriaBarco, true, true) + " AND ";
-			if (nombre != null)
-				query += "B.nombre LIKE " + Data.String2Sql(nombre, true, true) + " AND ";
-			if (tripulantes >= 1)
-				query += "B.tripulantes LIKE " + "" + tripulantes + "" + " AND ";
+				query += "C.nombre LIKE " + Data.String2Sql(sCategoriaBarco, true, true) + " AND ";
+			if (sNombre != null)
+				query += "B.nombre LIKE " + Data.String2Sql(sNombre, true, true) + " AND ";
+			if (iTripulantes >= 1)
+				query += "B.tripulantes LIKE " + "" + iTripulantes + "" + " AND ";
 			if (!query.isEmpty())
 				query = " WHERE " + query.substring(0, query.length() - 5);
 			

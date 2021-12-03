@@ -14,7 +14,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import es.uca.gii.csi21.turner.data.Barco;
 import es.uca.gii.csi21.turner.data.CategoriaBarco;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
@@ -28,7 +27,6 @@ public class IfrBarcos extends JInternalFrame
 	private JTable tabResult;
 	private JFrame pnlParent;
 
-
 	/**
 	 * @param frame
 	 * Description: Create the frame.
@@ -36,10 +34,11 @@ public class IfrBarcos extends JInternalFrame
 	 */
 	public IfrBarcos(JFrame frame) throws Exception 
 	{
+		pnlParent = frame;
 		setResizable(true);
 		setClosable(true);
 		setTitle("Barcos");
-		setBounds(100, 100, 900, 600);
+		setBounds(100, 100, 1100, 800);
 		
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.NORTH);
@@ -66,26 +65,16 @@ public class IfrBarcos extends JInternalFrame
 		panel.add(txtTripulantes);
 		txtTripulantes.setColumns(10);
 		
-		JButton btnBuscar = new JButton("Buscar");
-		
-		
 		JLabel lblCategoriaBarco = new JLabel("Categoria Barco");
 		panel.add(lblCategoriaBarco);
 		
 		JComboBox<CategoriaBarco> cmbCategoriaBarco = new JComboBox<CategoriaBarco>();
 		cmbCategoriaBarco.setModel(new CategoriaBarcoListModel(CategoriaBarco.Select()));
-		//System.out.println(CategoriaBarco.Select());
-		//cmbCategoriaBarco.setBounds(200, 50, 100, 100);
-		//getContentPane().add(cmbCategoriaBarco);
-		//JComboBox comboBox = new JComboBox();
-		
+		cmbCategoriaBarco.setBounds(200, 50, 100, 100);		
 		cmbCategoriaBarco.setEditable(true);
 		panel.add(cmbCategoriaBarco);
 		
-		
-		
-		
-		
+		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() 
 		{
 			public void actionPerformed(ActionEvent e) 
@@ -106,8 +95,7 @@ public class IfrBarcos extends JInternalFrame
 
 				}catch (Exception i) 
 				{
-					JOptionPane.showMessageDialog(null, "Error durante la búsqueda.", "Error",
-							JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Error durante la búsqueda.", "Error",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -129,13 +117,13 @@ public class IfrBarcos extends JInternalFrame
 						 IfrBarco ifrBarco = null;
 						try {
 							ifrBarco = new IfrBarco(barco);
+							ifrBarco.setBounds(10, 27, 244, 192);
+							pnlParent.getContentPane().add(ifrBarco, 0);
+							ifrBarco.setVisible(true);
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						 ifrBarco.setBounds(10, 27, 244, 192);
-						 pnlParent.getContentPane().add(ifrBarco, 0);
-						 ifrBarco.setVisible(true);
 					 }
 				}
 			}

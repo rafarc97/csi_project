@@ -6,7 +6,6 @@ import javax.swing.AbstractListModel;
 
 public class CategoriaBarcoListModel extends AbstractListModel<CategoriaBarco> implements  javax.swing.ComboBoxModel<CategoriaBarco>
 {
-
 	private static final long serialVersionUID = 1L;
 	private List<CategoriaBarco> _aData;
 	private Object _oSelectedItem = null;
@@ -22,8 +21,6 @@ public class CategoriaBarcoListModel extends AbstractListModel<CategoriaBarco> i
 
 	@Override
 	public int getSize() { return _aData.size(); }
-
 	public Object getSelectedItem() { return _oSelectedItem; }
 	public void setSelectedItem(Object oSelectedItem) { _oSelectedItem = oSelectedItem; }
-
 }

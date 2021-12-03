@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import es.uca.gii.csi21.turner.data.Data;
 
 class CategoriaBarcoTest 
 {
-
 	/**
 	 * static void setUpBeforeClass()
 	 * @throws Exception
@@ -43,12 +41,11 @@ class CategoriaBarcoTest
 			CategoriaBarco categoriaBarco = new CategoriaBarco(1);
 			con = Data.Connection();
 			rs = con.createStatement().executeQuery("SELECT id, nombre FROM categoriabarco WHERE id = 1" );
-
 			rs.next();
 			
 			assertEquals(rs.getInt("id"), categoriaBarco.getId());
 			assertEquals(rs.getString("nombre"), categoriaBarco.getNombre());
-		} catch (SQLException e) { throw e; } 
+		}catch (SQLException e) { throw e; } 
 		finally 
 		{
 			if (rs != null) rs.close();
@@ -70,7 +67,6 @@ class CategoriaBarcoTest
 		{
 			ArrayList<CategoriaBarco> aCategoriaBarco = CategoriaBarco.Select();
 			assertEquals(3, aCategoriaBarco.size());
-		
 		}catch (Exception e) { throw e; } 
 	}
 }

@@ -21,9 +21,9 @@ public class Data
      * @return "url", "username" and password parameters
      * @throws Exception
      * public static Connection Connection()
-     * Description: Receive the "url", the "username" and the password parameters which are contain in the fb.properties file
+     * Description: Receive the "url", the "username" and the "password" parameters which are contain in the db.properties file
      * TODO: Musts exist getProperties method in this concretely Class, getConnection method in the DriverManager Class and the
-     * Properties method in the "Config" Class
+     * properties method in the "Config" Class
      * Finally, have to exist the jdb.url, jdbc.username and jdbc.password parameters in db.properties file
      */
     public static Connection Connection() throws Exception 
@@ -46,7 +46,7 @@ public class Data
      * @throws IOException
      * public static void LoadDriver()
      * Description: Return the jdbc.driverClassName parameter which contains (in our case) the string "com.mysql.cj.jdbc.Driver"
-     * TODO: Exist Properties method in Config Class, getPropertiesUrl method in Data Class
+     * TODO: Exist properties method in Config Class, getPropertiesUrl method in Data Class
      * Finally, have to exist the jdb.driverClassName in db.properties file  
      */
     public static void LoadDriver() 

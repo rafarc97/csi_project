@@ -15,19 +15,17 @@ public class CategoriaBarco
 	// Getters
 	public int getId() { return _iId; }
 	public String getNombre() { return _sNombre; }
-
 	
 	// Setters
-	public void set_sNombre(String sNombre) { _sNombre = sNombre; }
-	public void set_iId(int iId) { _iId = iId; }
+	public void setNombre(String sNombre) { _sNombre = sNombre; }
+	public void setId(int iId) { _iId = iId; }
 	
-
 	/**
 	 * public CategoriaBarco(int iId)
 	 * @param iId
 	 * @throws Exception
 	 * Description: Constructor
-	 * TODO: Receive an integer which belongs to the id of the database
+	 * TODO: Receive an integer which belongs to the id of the "categoriabarco" table
 	 */
 	public CategoriaBarco(int iId) throws Exception 
 	{
@@ -56,9 +54,9 @@ public class CategoriaBarco
 	
 	/**
 	 * public static ArrayList<CategoriaBarco> Select()
-	 * @return
+	 * @return ArrayList<CategoriaBarco>
 	 * @throws Exception
-	 * Description: Get all registers from database, create and ArrayList<CategoriaBarco> and return it
+	 * Description: Get all registers from "categoriabarco", create and ArrayList<CategoriaBarco> and return it
 	 * TODO: Database is working correctly; 
 	 */
 	public static ArrayList<CategoriaBarco> Select() throws Exception 
@@ -72,9 +70,9 @@ public class CategoriaBarco
 			con = Data.Connection();
 			rs = con.createStatement().executeQuery("SELECT id FROM categoriabarco");
 					
-			while (rs.next()) { aCategoriaBarco.add(new CategoriaBarco(rs.getInt("id"))); }
-				
-			System.out.println(aCategoriaBarco);
+			while (rs.next()) { 
+				aCategoriaBarco.add(new CategoriaBarco(rs.getInt("id"))); 
+			}
 			return aCategoriaBarco;
 		} catch (SQLException e) { throw e; } 
 		finally 
@@ -87,8 +85,8 @@ public class CategoriaBarco
 	/**
 	 * public String toString() 
 	 * Description: Return all class attributes as a string for showing information 
-	 * TODO: _iId, _sNombre attributes musts exist
+	 * TODO: _sNombre attribute musts exist
 	 */
 	@Override
-	public String toString() { return super.toString() + _sNombre; }
+	public String toString() { return _sNombre; }
 }
