@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 22, 2021 at 04:20 PM
+-- Generation Time: Dec 27, 2021 at 04:42 PM
 -- Server version: 8.0.17
 -- PHP Version: 7.3.10
 
@@ -22,12 +22,6 @@ SET time_zone = "+00:00";
 -- Database: `turner`
 --
 
-/* Create database */
-CREATE DATABASE turner;
-
-/* Select database */
-USE turner;
-
 -- --------------------------------------------------------
 
 --
@@ -35,20 +29,11 @@ USE turner;
 --
 
 CREATE TABLE `barco` (
-  `registro` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `id_categoriabarco` int(11) NOT NULL,
+  `id` int(32) NOT NULL,
+  `id_categoriabarco` int(32) NOT NULL,
   `nombre` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `tripulantes` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `barco`
---
-
-INSERT INTO `barco` (`registro`, `id_categoriabarco`, `nombre`, `tripulantes`) VALUES
-('123123123', 1, 'Manoloo', 123123123),
-('378274GHA', 2, 'Manolo', 155),
-('A45JG8W', 3, 'Roberto', 20000);
 
 -- --------------------------------------------------------
 
@@ -57,7 +42,7 @@ INSERT INTO `barco` (`registro`, `id_categoriabarco`, `nombre`, `tripulantes`) V
 --
 
 CREATE TABLE `categoriabarco` (
-  `id` int(1) NOT NULL,
+  `id` int(32) NOT NULL,
   `nombre` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -66,9 +51,9 @@ CREATE TABLE `categoriabarco` (
 --
 
 INSERT INTO `categoriabarco` (`id`, `nombre`) VALUES
-(1, 'galera'),
 (2, 'bote'),
-(3, 'galeon');
+(3, 'galeon'),
+(1, 'galera');
 
 --
 -- Indexes for dumped tables
@@ -78,15 +63,25 @@ INSERT INTO `categoriabarco` (`id`, `nombre`) VALUES
 -- Indexes for table `barco`
 --
 ALTER TABLE `barco`
-  ADD PRIMARY KEY (`registro`),
-  ADD UNIQUE KEY `codRegistro` (`registro`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `id_categoriabarco` (`id_categoriabarco`);
 
 --
 -- Indexes for table `categoriabarco`
 --
 ALTER TABLE `categoriabarco`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombre` (`nombre`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `barco`
+--
+ALTER TABLE `barco`
+  MODIFY `id` int(32) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=168;
 
 --
 -- Constraints for dumped tables

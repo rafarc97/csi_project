@@ -14,7 +14,6 @@ import javax.swing.JComboBox;
 public class IfrBarco extends JInternalFrame 
 {
 	private static final long serialVersionUID = 1L;
-	private JTextField txtRegistro;
 	private JTextField txtNombre;
 	private JTextField txtTripulantes;
 	private Barco _barco = null;
@@ -34,30 +33,21 @@ public class IfrBarco extends JInternalFrame
 		setBounds(100, 100, 600, 450);
 		getContentPane().setLayout(null);
 		
-		JLabel lblRegistro = new JLabel("Registro");
-		lblRegistro.setBounds(10, 23, 54, 23);
-		getContentPane().add(lblRegistro);
-		
-		txtRegistro = new JTextField();
-		txtRegistro.setBounds(10, 48, 96, 19);
-		getContentPane().add(txtRegistro);
-		txtRegistro.setColumns(10);
-		
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(149, 28, 45, 13);
+		lblNombre.setBounds(10, 28, 45, 13);
 		getContentPane().add(lblNombre);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(149, 48, 96, 19);
+		txtNombre.setBounds(10, 48, 96, 19);
 		getContentPane().add(txtNombre);
 		txtNombre.setColumns(10);
 		
 		JLabel lblTripulantes = new JLabel("Tripulantes");
-		lblTripulantes.setBounds(280, 28, 67, 13);
+		lblTripulantes.setBounds(116, 28, 67, 13);
 		getContentPane().add(lblTripulantes);
 		
 		txtTripulantes = new JTextField();
-		txtTripulantes.setBounds(280, 48, 96, 19);
+		txtTripulantes.setBounds(116, 48, 96, 19);
 		getContentPane().add(txtTripulantes);
 		txtTripulantes.setColumns(10);
 		
@@ -72,7 +62,6 @@ public class IfrBarco extends JInternalFrame
 		
 		if(_barco != null) 
 		{
-			txtRegistro.setText(_barco.getRegistro());
 			txtNombre.setText(_barco.getNombre());
 			txtTripulantes.setText("" + _barco.getTripulantes() + "");
 			cmbCategoriaBarco.getModel().setSelectedItem(_barco.getCategoriaBarco());
@@ -91,12 +80,6 @@ public class IfrBarco extends JInternalFrame
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					if (txtRegistro.getText().isEmpty()) 
-					{
-						JOptionPane.showMessageDialog(null, "Campo Vacío", "Error en el campo Registro",
-								JOptionPane.ERROR_MESSAGE);
-						return;
-					}
 					if (txtNombre.getText().isEmpty()) 
 					{
 						JOptionPane.showMessageDialog(null, "Campo Vacío", "Error en el campo Nombre",
@@ -111,11 +94,10 @@ public class IfrBarco extends JInternalFrame
 					}
 					if (_barco == null)
 					{
-						_barco = Barco.Create(txtRegistro.getText(), (CategoriaBarco)cmbCategoriaBarco.getModel().getSelectedItem(), txtNombre.getText(), Integer.parseInt(txtTripulantes.getText()));
+						_barco = Barco.Create((CategoriaBarco)cmbCategoriaBarco.getModel().getSelectedItem(), txtNombre.getText(), Integer.parseInt(txtTripulantes.getText()));
 					}
 					else 
 					{
-						_barco.setRegistro(txtRegistro.getText());
 						_barco.setNombre(txtNombre.getText());
 						_barco.setTripulantes(Integer.parseInt(txtTripulantes.getText()));						
 						_barco.Update();
@@ -133,7 +115,7 @@ public class IfrBarco extends JInternalFrame
 				}
 			}	
 		});
-		butSave.setBounds(291, 104, 85, 21);
+		butSave.setBounds(127, 104, 85, 21);
 		getContentPane().add(butSave);	
 	}
 }

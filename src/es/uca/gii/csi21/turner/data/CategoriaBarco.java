@@ -18,7 +18,6 @@ public class CategoriaBarco
 	
 	// Setters
 	public void setNombre(String sNombre) { _sNombre = sNombre; }
-	public void setId(int iId) { _iId = iId; }
 	
 	/**
 	 * public CategoriaBarco(int iId)
@@ -36,14 +35,14 @@ public class CategoriaBarco
 		try 
 		{
 			con = Data.Connection();
-			rs = con.createStatement().executeQuery("SELECT id, nombre FROM categoriabarco"
+			rs = con.createStatement().executeQuery("SELECT nombre FROM categoriabarco"
 					+ " WHERE id = " + iId);
 
-			if (rs.next()) 
-			{
-				_sNombre = rs.getString("nombre");
-				_iId = iId;		
-			}
+			rs.next();
+
+			_sNombre = rs.getString("nombre");
+			_iId = iId;		
+			
 		} catch (SQLException e) { throw e; } 
 		finally 
 		{
@@ -70,9 +69,8 @@ public class CategoriaBarco
 			con = Data.Connection();
 			rs = con.createStatement().executeQuery("SELECT id FROM categoriabarco");
 					
-			while (rs.next()) { 
-				aCategoriaBarco.add(new CategoriaBarco(rs.getInt("id"))); 
-			}
+			while (rs.next()) aCategoriaBarco.add(new CategoriaBarco(rs.getInt("id")));
+			
 			return aCategoriaBarco;
 		} catch (SQLException e) { throw e; } 
 		finally 

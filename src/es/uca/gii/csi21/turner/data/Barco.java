@@ -9,36 +9,34 @@ public class Barco
 {
 	
 	// Attributes
-	private String _sRegistro;
+	private int _iId;
 	private String _sNombre;
 	private int _iTripulantes;
 	private boolean _bIsDeleted = false;
 	private CategoriaBarco _categoriaBarco;
 
 	// Getters
-	public String getRegistro() { return _sRegistro; }
+	public int getId() { return _iId; }
 	public String getNombre() { return _sNombre; }
 	public int getTripulantes() { return _iTripulantes; }
 	public boolean getIsDeleted() { return _bIsDeleted; }
 	public CategoriaBarco getCategoriaBarco() { return _categoriaBarco; }
 	
 	// Setters
-	public void setIsDeleted(boolean bIsDeleted) { _bIsDeleted = bIsDeleted; }
-	public void setRegistro(String sRegistro) { _sRegistro = sRegistro; }
 	public void setNombre(String sNombre) { _sNombre = sNombre; }
 	public void setTripulantes(int iTripulantes) { _iTripulantes = iTripulantes; }
 	public void setCategoriaBarco(CategoriaBarco categoriaBarco) { _categoriaBarco = categoriaBarco; }
 
 	/**
-	 * public Barco(String sRegistro)
-	 * @param sRegistro
+	 * public Barco(int iId)
+	 * @param iId
 	 * @throws Exception
 	 * Description: Constructor 
-	 * TODO: Receive a string which is the RegisterCode of a
+	 * TODO: Receive an int which is the RegisterCode of a
 	 * specific "barco", Strin2Sql and Connection methods which
 	 * belongs to Data class work correctly
 	 */
-	public Barco(String sRegistro) throws Exception 
+	public Barco(int iId) throws Exception 
 	{
 
 		Connection con = null;
@@ -47,16 +45,16 @@ public class Barco
 		try 
 		{
 			con = Data.Connection();
-			rs = con.createStatement().executeQuery("SELECT registro, nombre, tripulantes, id_categoriabarco FROM barco"
-					+ " WHERE registro = " + Data.String2Sql(sRegistro, true, false));
+			rs = con.createStatement().executeQuery("SELECT nombre, tripulantes, id_categoriabarco FROM barco"
+					+ " WHERE id = " + iId);
 
-			if (rs.next()) 
-			{
-				_sNombre = rs.getString("nombre");
-				_iTripulantes = rs.getInt("tripulantes");
-				_sRegistro = sRegistro;
-				_categoriaBarco = new CategoriaBarco(rs.getInt("id_categoriabarco"));
-			}
+			rs.next();
+			
+			_sNombre = rs.getString("nombre");
+			_iTripulantes = rs.getInt("tripulantes");
+			_iId = iId;
+			_categoriaBarco = new CategoriaBarco(rs.getInt("id_categoriabarco"));
+			
 		} catch (SQLException e) { throw e; } 
 		finally 
 		{
@@ -68,17 +66,16 @@ public class Barco
 	/**
 	 * public String toString() 
 	 * Description: Return all class attributes as a string for showing information 
-	 * TODO: _sRegistro, _sNombre, _iTripulantes attributes musts exist
+	 * TODO: _iId, _sNombre, _iTripulantes attributes musts exist
 	 */
 	@Override
 	public String toString() 
 	{
-		return super.toString() + ":" + _sRegistro + ":" + _categoriaBarco.toString() + ":" + _sNombre + ":" + _iTripulantes;
+		return super.toString() + ":" + _iId + ":" + _categoriaBarco.toString() + ":" + _sNombre + ":" + _iTripulantes;
 	}
 
 	/**
-	 * public static Barco Create(String sRegistro, CategoriaBarco categoriaBarco, String sNombre, int iTripulantes)
-	 * @param sRegistro
+	 * public static Barco Create(CategoriaBarco categoriaBarco, String sNombre, int iTripulantes)
 	 * @param categoriaBarco
 	 * @param sNombre
 	 * @param iTripulantes
@@ -88,18 +85,18 @@ public class Barco
 	 * TODO: Database is working correctly, Strin2Sql and Connection method which belongs to
 	 * Data class work correctly
 	 */
-	public static Barco Create(String sRegistro, CategoriaBarco categoriaBarco, String sNombre, int iTripulantes) throws Exception 
+	public static Barco Create(CategoriaBarco categoriaBarco, String sNombre, int iTripulantes) throws Exception 
 	{
 		Connection con = null;
 		try 
 		{
 			con = Data.Connection();
 			con.createStatement()
-					.executeUpdate("INSERT INTO barco (registro, id_categoriabarco, nombre, tripulantes) " + " VALUES " + "("
-							+ Data.String2Sql(sRegistro, true, false) + ", " + Data.String2Sql("" + categoriaBarco.getId() + "", true, false) + 
+					.executeUpdate("INSERT INTO barco (id_categoriabarco, nombre, tripulantes) " + " VALUES " + "("
+							+ Data.String2Sql("" + categoriaBarco.getId() + "", true, false) + 
 							", " + Data.String2Sql(sNombre, true, false)
 							+ ", " + Data.String2Sql("" + iTripulantes + "", true, false) + ");");
-			return new Barco(sRegistro);
+			return new Barco(Data.LastId(con));
 		} catch (SQLException e) { throw e; } 
 		finally { if (con != null) con.close(); }
 	}
@@ -121,7 +118,7 @@ public class Barco
 		{
 			con = Data.Connection();
 			con.createStatement().executeUpdate(
-					"DELETE FROM barco WHERE registro = " + Data.String2Sql(_sRegistro, true, false));
+					"DELETE FROM barco WHERE id = " + _iId);
 			_bIsDeleted = true;
 		} catch (SQLException e) { throw e; } 
 		finally { if (con != null) con.close(); }
@@ -144,24 +141,23 @@ public class Barco
 			con = Data.Connection();	
 			con.createStatement()
 				.executeUpdate("UPDATE barco SET nombre = " + Data.String2Sql(_sNombre, true, false) + ", id_categoriabarco = " + _categoriaBarco.getId() 
-						+ ", tripulantes = " + _iTripulantes + " WHERE registro = " + Data.String2Sql(_sRegistro, true, false));
+						+ ", tripulantes = " + _iTripulantes + " WHERE id = " + _iId);
 			
 		} catch (SQLException e) { throw e; } 
 		finally { if (con != null) con.close(); }
 	}
 
 	/**
-	 * public static ArrayList<Barco> Select(String sRegistro, String sCategoriaBarco, String sNombre, int iTripulantes)
-	 * @param sRegistro
+	 * public static ArrayList<Barco> Select(String sCategoriaBarco, String sNombre, int iTripulantes)
 	 * @param sCategoriaBarco
 	 * @param sNombre
 	 * @param iTripulantes
 	 * @return An ArrayList<Barco>
 	 * @throws Exception
 	 * Description: Get all registers from database, create and ArrayList<Barco> and return it
-	 * TODO: Database is working correctly; is received "registro", "categoriabarco", "nombre" and "tripulantes" parameters
+	 * TODO: Database is working correctly; is received "id", "categoriabarco", "nombre" and "tripulantes" parameters
 	 */
-	public static ArrayList<Barco> Select(String sRegistro, String sCategoriaBarco, String sNombre, int iTripulantes) throws Exception 
+	public static ArrayList<Barco> Select(String sCategoriaBarco, String sNombre, int iTripulantes) throws Exception 
 	{
 		ResultSet rs = null;
 		Connection con = null;
@@ -170,11 +166,9 @@ public class Barco
 		try 
 		{
 			con = Data.Connection();
-			rs = con.createStatement().executeQuery("SELECT B.registro FROM barco B INNER JOIN categoriabarco C ON B.id_categoriabarco = C.id"
-					+ Barco.Where(sRegistro, sCategoriaBarco, sNombre, iTripulantes));
-					
-			while (rs.next()) { aBarco.add(new Barco(rs.getString("registro"))); }
-				
+			rs = con.createStatement().executeQuery("SELECT B.id FROM barco B INNER JOIN categoriabarco C ON B.id_categoriabarco = C.id"
+					+ Barco.Where(sCategoriaBarco, sNombre, iTripulantes));
+			while (rs.next()) aBarco.add(new Barco(rs.getInt("id")));
 			return aBarco;
 		} catch (SQLException e) { throw e; } 
 		finally 
@@ -185,35 +179,28 @@ public class Barco
 	}
 
 	/**
-	 * private static String Where(String _sRegistro, String sCategoriaBarco, String sNombre, int iTripulantes)
-	 * @param _sRegistro
+	 * private static String Where(String sCategoriaBarco, String sNombre, int iTripulantes)
 	 * @param sCategoriaBarco
 	 * @param nombre
 	 * @param tripulantes
 	 * @return A string which contains "Where" conditions
 	 * @throws Exception
 	 * Description: Static private method which return a string that contains "Where" conditions
-	 * TODO: Receive "_sRegistro", "sCategoriaBarco", "sNombre" and "iTripulantes" parameters
+	 * TODO: Receive "sCategoriaBarco", "sNombre" and "iTripulantes" parameters
 	 */
-	private static String Where(String _sRegistro, String sCategoriaBarco, String sNombre, int iTripulantes) throws Exception 
+	private static String Where(String sCategoriaBarco, String sNombre, int iTripulantes) throws Exception 
 	{
 		String query = "";
 		
-		try 
-		{
-			if (_sRegistro != null)
-				query += "B.registro LIKE " + Data.String2Sql(_sRegistro, true, true) + " AND ";
-			if (sCategoriaBarco != null)
-				query += "C.nombre LIKE " + Data.String2Sql(sCategoriaBarco, true, true) + " AND ";
-			if (sNombre != null)
-				query += "B.nombre LIKE " + Data.String2Sql(sNombre, true, true) + " AND ";
-			if (iTripulantes >= 1)
-				query += "B.tripulantes LIKE " + "" + iTripulantes + "" + " AND ";
-			if (!query.isEmpty())
-				query = " WHERE " + query.substring(0, query.length() - 5);
-			
-		} catch (Exception e) { throw e; } 
-	
+		if (sCategoriaBarco != null)
+			query += "C.nombre LIKE " + Data.String2Sql(sCategoriaBarco, true, true) + " AND ";
+		if (sNombre != null)
+			query += "B.nombre LIKE " + Data.String2Sql(sNombre, true, true) + " AND ";
+		if (iTripulantes >= 1)
+			query += "B.tripulantes LIKE " + "" + iTripulantes + "" + " AND ";
+		if (!query.isEmpty())
+			query = " WHERE " + query.substring(0, query.length() - 5);
+
 		return query;
 	}
 }

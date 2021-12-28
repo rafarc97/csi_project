@@ -53,8 +53,7 @@ class DataTest
 			}
 			
 			assertEquals(2, i);
-			i = rs.getMetaData().getColumnCount();
-			assertEquals(2, i);
+			assertEquals(2, rs.getMetaData().getColumnCount());
 			
 		}catch (SQLException e) { throw e; }
 		finally 

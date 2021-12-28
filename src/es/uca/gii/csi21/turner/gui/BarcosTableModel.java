@@ -23,15 +23,15 @@ public class BarcosTableModel extends javax.swing.table.AbstractTableModel
 	public int getRowCount() { return _aData.size(); }
 
 	@Override
-	public Object getValueAt(int iRow, int iCol)
-	{ 
+	public Object getValueAt(int iRow, int iCol) throws IllegalStateException
+	{
 		switch (iCol) 
 		{
-			case 0: return _aData.get(iRow).getRegistro();
+			case 0: return _aData.get(iRow).getId();
 			case 1: return _aData.get(iRow).getNombre();
 			case 2: return _aData.get(iRow).getTripulantes();
 			case 3: return _aData.get(iRow).getCategoriaBarco().getNombre();
-			default: return null;
+			default: throw new IllegalStateException("Error. Registro no encontrado");
 		}
 	}
 	public Barco getData(int iRow) { return _aData.get(iRow); }

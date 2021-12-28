@@ -3,6 +3,8 @@ package es.uca.gii.csi21.turner.data;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 import es.uca.gii.csi21.turner.util.Config;
 
@@ -87,4 +89,25 @@ public class Data
      * TODO: Convert a true boolean into 1, and a false boolean into a 0
      */
     public static int Boolean2Sql(boolean b){ return b ? 1 : 0; }
+    
+    /**
+     * @param con
+     * @return an Id
+     * @throws Exception
+     * public static int LastId(Connection con)
+     * Description: Return the LastId
+     * TODO: Must receive a Connection object
+     */
+    public static int LastId(Connection con) throws Exception, SQLException {
+		ResultSet rs = null;
+		Properties properties;
+
+		try {
+			properties = Config.Properties(getPropertiesUrl());
+			rs = con.createStatement().executeQuery(properties.getProperty("jdbc.lastIdSentence"));
+			rs.next();
+			return rs.getInt(1);
+		} catch (SQLException e) { throw e; } 
+		finally { if (rs != null) rs.close(); }
+	}
 }

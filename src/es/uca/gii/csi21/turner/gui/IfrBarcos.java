@@ -21,7 +21,6 @@ import javax.swing.JComboBox;
 public class IfrBarcos extends JInternalFrame 
 {
 	private static final long serialVersionUID = 1L;
-	private JTextField txtRegistro;
 	private JTextField txtNombre;
 	private JTextField txtTripulantes;
 	private JTable tabResult;
@@ -43,13 +42,6 @@ public class IfrBarcos extends JInternalFrame
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.NORTH);
 		panel.setLayout(new GridLayout(1, 0, 0, 0));
-		
-		JLabel lblRegistro = new JLabel("Registro");
-		panel.add(lblRegistro);
-		
-		txtRegistro = new JTextField();
-		panel.add(txtRegistro);
-		txtRegistro.setColumns(10);
 		
 		JLabel lblNombre = new JLabel("Nombre");
 		panel.add(lblNombre);
@@ -82,7 +74,7 @@ public class IfrBarcos extends JInternalFrame
 				try 
 				{
 					tabResult.setModel(
-							 new BarcosTableModel(Barco.Select(txtRegistro.getText().isEmpty() ? null : txtRegistro.getText(),
+							 new BarcosTableModel(Barco.Select(
 									 cmbCategoriaBarco.getModel().getSelectedItem() == null ? null : cmbCategoriaBarco.getModel().getSelectedItem().toString(),
 									 txtNombre.getText().isEmpty() ? null : txtNombre.getText(),
 								     txtTripulantes.getText().isEmpty() ? 0 : Integer.parseInt(txtTripulantes.getText()))));
@@ -115,14 +107,16 @@ public class IfrBarcos extends JInternalFrame
 					 if (barco != null) 
 					 {
 						 IfrBarco ifrBarco = null;
-						try {
+						try 
+						{
 							ifrBarco = new IfrBarco(barco);
 							ifrBarco.setBounds(10, 27, 244, 192);
 							pnlParent.getContentPane().add(ifrBarco, 0);
 							ifrBarco.setVisible(true);
-						} catch (Exception e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+						} catch (Exception e1) 
+						{
+							JOptionPane.showMessageDialog(null, "Error al abrir detalles del barco seleccionado", "Error",
+									JOptionPane.ERROR_MESSAGE); 
 						}
 					 }
 				}

@@ -39,12 +39,12 @@ class BarcoTest
 
 		try 
 		{
-			Barco barco = new Barco("A45JG8W");
+			Barco barco = new Barco(2);
 			con = Data.Connection();
-			rs = con.createStatement().executeQuery("SELECT registro, nombre, tripulantes FROM barco WHERE registro = " + Data.String2Sql("A45JG8W", true, false));
+			rs = con.createStatement().executeQuery("SELECT id, nombre, tripulantes FROM barco WHERE id = " + Data.String2Sql("A45JG8W", true, false));
 			rs.next();
 			
-			assertEquals(rs.getString("registro"), barco.getRegistro());
+			assertEquals(rs.getString("id"), barco.getId());
 			assertEquals(rs.getString("nombre"), barco.getNombre());
 			assertEquals(rs.getInt("tripulantes"), barco.getTripulantes());
 		}catch (SQLException e) { throw e; } 
@@ -72,16 +72,16 @@ class BarcoTest
 		try 
 		{
 			
-			Barco barco = Barco.Create("B88YT9P", new CategoriaBarco(1), "Francisco", 600);
+			Barco barco = Barco.Create(new CategoriaBarco(1), "Francisco", 600);
 			con = Data.Connection();
-			rs = con.createStatement().executeQuery("SELECT registro, nombre, tripulantes FROM barco WHERE registro = " + Data.String2Sql("B88YT9P", true, false));
+			rs = con.createStatement().executeQuery("SELECT id, nombre, tripulantes FROM barco WHERE id = " + Data.String2Sql("B88YT9P", true, false));
 			rs.next();
 			
-			assertEquals(rs.getString("registro"), barco.getRegistro());
+			assertEquals(rs.getString("id"), barco.getId());
 			assertEquals(rs.getString("nombre"), barco.getNombre());
 			assertEquals(rs.getInt("tripulantes"), barco.getTripulantes());
 			
-			con.createStatement().executeUpdate("DELETE FROM barco WHERE registro = " + Data.String2Sql(barco.getRegistro(), true, false));
+			con.createStatement().executeUpdate("DELETE FROM barco WHERE id = " + barco.getId());
 			
 		}catch (SQLException e) { throw e; } 
 		finally 
@@ -97,52 +97,54 @@ class BarcoTest
 	 * Description: Test Select method from "Barco" class
 	 * TODO: Database is working correctly
 	 */
-	@Disabled
 	@Test
 	public void testSelect() throws Exception 
 	{
-		try 
-		{
-			ArrayList<Barco> aBarco1 = Barco.Select(null, null, null, 0);
-			assertEquals(3, aBarco1.size());
 
-			ArrayList<Barco> aBarco2 = Barco.Select("A45JG8W", null, null, 0);
-			assertEquals(1, aBarco2.size());
-
-			ArrayList<Barco> aBarco3 = Barco.Select(null, null, "Roberto", 0);
-			assertEquals(1, aBarco3.size());
+			// First Test
+			CategoriaBarco categoriaBarco = new CategoriaBarco(2);
+			Barco.Create(categoriaBarco, "Roberto", 100);
+			ArrayList<Barco> aBarco = Barco.Select(categoriaBarco.getNombre(), "Roberto", 100);
 			
-			ArrayList<Barco> aBarco4 = Barco.Select(null, null, null, 20000);
-			assertEquals(1, aBarco4.size());
+			assertEquals(1, aBarco.size());
+			assertEquals("bote", aBarco.get(0).getCategoriaBarco().getNombre());
+			assertEquals("Roberto", aBarco.get(0).getNombre());
+			assertEquals(100, aBarco.get(0).getTripulantes());
 			
-			ArrayList<Barco> aBarco5 = Barco.Select("A45JG8W", null, null, 20000);
-			assertEquals(1, aBarco5.size());
+			aBarco.get(0).Delete();
 			
-			ArrayList<Barco> aBarco6 = Barco.Select("A45JG8W", null , "Roberto", 0);
-			assertEquals(1, aBarco6.size());
+			// Second Test
+			Barco.Create(categoriaBarco, "", 0);
+			aBarco = Barco.Select(categoriaBarco.getNombre(), null, 0);
 			
-			ArrayList<Barco> aBarco7 = Barco.Select(null, null, "Roberto", 20000);
-			assertEquals(1, aBarco7.size());
+			assertEquals(1, aBarco.size());
+			assertEquals("bote", aBarco.get(0).getCategoriaBarco().getNombre());
+			assertEquals("", aBarco.get(0).getNombre());
+			assertEquals(0, aBarco.get(0).getTripulantes());
 			
-			ArrayList<Barco> aBarco8 = Barco.Select(null, "3", "Roberto", 0);
-			assertEquals(1, aBarco8.size());
+			aBarco.get(0).Delete();
 			
-			ArrayList<Barco> aBarco9 = Barco.Select("A45JG8W", "3" , null, 20000);
-			assertEquals(1, aBarco9.size());
+			// Third Test
+			Barco.Create(categoriaBarco, "Roberto", 0);
+			aBarco = Barco.Select(categoriaBarco.getNombre(), "Roberto", 0);
 			
-			ArrayList<Barco> aBarco10 = Barco.Select("A45JG8W", null , "Roberto", 20000);
-			assertEquals(1, aBarco10.size());
+			assertEquals(1, aBarco.size());
+			assertEquals("bote", aBarco.get(0).getCategoriaBarco().getNombre());
+			assertEquals("Roberto", aBarco.get(0).getNombre());
+			assertEquals(0, aBarco.get(0).getTripulantes());
 			
-			ArrayList<Barco> aBarco11 = Barco.Select(null, "3", "Roberto", 20000);
-			assertEquals(1, aBarco11.size());
+			aBarco.get(0).Delete();
 			
-			ArrayList<Barco> aBarco12 = Barco.Select("A45JG8W", "3", "Roberto", 0);
-			assertEquals(1, aBarco12.size());
+			// Fourth Test
+			Barco.Create(categoriaBarco, "", 100);
+			aBarco = Barco.Select(categoriaBarco.getNombre(), null, 100);
 			
-			ArrayList<Barco> aBarco13 = Barco.Select("A45JG8W", "3", "Roberto", 20000);
-			assertEquals(1, aBarco13.size());
-		
-		}catch (Exception e) { throw e; } 
+			assertEquals(1, aBarco.size());
+			assertEquals("bote", aBarco.get(0).getCategoriaBarco().getNombre());
+			assertEquals("", aBarco.get(0).getNombre());
+			assertEquals(100, aBarco.get(0).getTripulantes());
+			
+			aBarco.get(0).Delete();
 	}
 	
 	/**
@@ -157,12 +159,12 @@ class BarcoTest
 	{
 		try 
 		{
-			Barco barco = new Barco("A45JG8W");
+			Barco barco = new Barco(2);
 			barco.setNombre("Roberto");
 			barco.setTripulantes(20000);
 			barco.Update();
 			
-			assertEquals("A45JG8W", barco.getRegistro());
+			assertEquals("A45JG8W", barco.getId());
 			assertEquals("Roberto", barco.getNombre());
 			assertEquals(20000, barco.getTripulantes());
 		}catch (Exception e) { throw e; } 
@@ -182,17 +184,17 @@ class BarcoTest
 		Connection con = null;
 		ResultSet rs = null;
 		
-		Barco barco = Barco.Create("GH46F78R", new CategoriaBarco(1), "ElNacho", 200);
+		Barco barco = Barco.Create(new CategoriaBarco(1), "ElNacho", 200);
 		barco.Delete();
 
 		try 
 		{
 			con = Data.Connection();
 			rs = con.createStatement()
-					.executeQuery("SELECT COUNT(registro) AS registro " + "FROM barco WHERE registro = " + Data.String2Sql(barco.getRegistro(), true, true));
+					.executeQuery("SELECT COUNT(id) AS id " + "FROM barco WHERE id = " + barco.getId());
 			rs.next();
 			
-			assertEquals(0, Integer.parseInt(rs.getString("registro")));
+			assertEquals(0, Integer.parseInt(rs.getString("id")));
 			assertEquals(true, barco.getIsDeleted());
 
 		}catch (SQLException e) { throw e; } 

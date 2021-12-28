@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.event.ActionListener;
@@ -29,7 +30,11 @@ public class FrMain
 				{
 					FrMain window = new FrMain();
 					window.frame.setVisible(true);
-				}catch (Exception e) { e.printStackTrace(); }
+				}catch (Exception e) 
+				{ 
+					JOptionPane.showMessageDialog(null, "Error al cargar la vista", "Error",
+						JOptionPane.ERROR_MESSAGE);  
+				}
 			}
 		});
 	}
@@ -74,14 +79,14 @@ public class FrMain
 				try 
 				{
 					ifrBarco = new IfrBarco(null);
+					ifrBarco.setBounds(10, 27, 800, 650);
+					frame.getContentPane().add(ifrBarco);
+					ifrBarco.setVisible(true);
 				}catch (Exception e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				{ 
+					JOptionPane.showMessageDialog(null, "Error al cargar la vista para crear barcos", "Error",
+						JOptionPane.ERROR_MESSAGE); 
 				}
-				ifrBarco.setBounds(10, 27, 800, 650);
-				frame.getContentPane().add(ifrBarco);
-				ifrBarco.setVisible(true);
 			}
 		});
 		mitNew.add(mitNewBarco);
@@ -98,15 +103,15 @@ public class FrMain
 				try 
 				{
 					ifrBarcos = new IfrBarcos(frame);
+					ifrBarcos.setBounds(10, 27, 800, 650);
+					// Second parameter makes always appear in the foreground appear in the foreground
+					frame.getContentPane().add(ifrBarcos, 0);
+					ifrBarcos.setVisible(true);
 				}catch (Exception e1) 
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+				{ 
+					JOptionPane.showMessageDialog(null, "Error al cargar la vista para buscar barcos", "Error",
+						JOptionPane.ERROR_MESSAGE);  
 				}
-				ifrBarcos.setBounds(10, 27, 800, 650);
-				// Second parameter makes always appear in the foreground appear in the foreground
-				frame.getContentPane().add(ifrBarcos, 0);
-				ifrBarcos.setVisible(true);
 			}
 		});
 		mitSearch.add(mitSearchBarco);
